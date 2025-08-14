@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Healthcare ROAS Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+  <div class="max-w-xl w-full bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Healthcare ROAS Calculator</h1>
+    <form id="roasForm" class="space-y-4">
+      <div>
+        <label class="block font-semibold">Monthly Ad Spend (AED)</label>
+        <input type="number" id="adSpend" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block font-semibold">Leads Generated</label>
+        <input type="number" id="leads" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block font-semibold">Conversion Rate (%)</label>
+        <input type="number" id="conversion" class="w-full border p-2 rounded" required>
+      </div>
+      <div>
+        <label class="block font-semibold">Avg. Booking Value (AED)</label>
+        <input type="number" id="bookingValue" class="w-full border p-2 rounded" required>
+      </div>
+      <button type="submit" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">Calculate ROAS</button>
+    </form>
+
+    <div id="results" class="mt-6 hidden">
+      <h2 class="text-xl font-semibold mb-2">Results:</h2>
+      <p><strong>Total Bookings:</strong> <span id="totalBookings"></span></p>
+      <p><strong>Estimated Revenue (AED):</strong> <span id="revenue"></span></p>
+      <p><strong>ROAS:</strong> <span id="roas" class="font-bold"></span></p>
+      <div class="mt-4">
+        <a id="whatsappShare" href="#" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Share via WhatsApp</a>
+      </div>
+    
+    <div id="confirmationMessage" class="mt-4 text-green-600 font-medium hidden">
+      ✅ Your ROAS report has been shared via email and WhatsApp!
+    </div>
+  </div>
+
+
+  <script>
+    document.getElementById('roasForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const adSpend = parseFloat(document.getElementById('adSpend').value);
+      const leads = parseInt(document.getElementById('leads').value);
+      const conversion = parseFloat(document.getElementById('conversion').value);
+      const bookingValue = parseFloat(document.getElementById('bookingValue').value);
+
+      const totalBookings = leads * (conversion / 100);
+      const revenue = totalBookings * bookingValue;
+      const roas = revenue / adSpend;
+
+      document.getElementById('totalBookings').textContent = totalBookings.toFixed(2);
+      document.getElementById('revenue').textContent = revenue.toFixed(2);
+      const roasElem = document.getElementById('roas');
+      roasElem.textContent = roas.toFixed(2);
+      roasElem.className = 'font-bold ' + (roas >= 1 ? 'text-green-600' : 'text-red-600');
+      document.getElementById('results').classList.remove('hidden');
+      document.getElementById("confirmationMessage").classList.remove("hidden");
+
+      // WhatsApp share link
+      const message = `Ad Spend: AED ${adSpend}\nLeads: ${leads}\nConversion Rate: ${conversion}%\nBooking Value: AED ${bookingValue}\n\nBookings: ${totalBookings.toFixed(2)}\nRevenue: AED ${revenue.toFixed(2)}\nROAS: ${roas.toFixed(2)}`;
+      const whatsappURL = `https://wa.me/971501390421?text=${encodeURIComponent(message)}`;
+      document.getElementById('whatsappShare').href = whatsappURL;
+
+      // Send email via mailto link
+      const emailSubject = "New ROAS Calculator Submission";
+      const emailBody = message.replace(/\n/g, '%0D%0A');
+      window.open(`mailto:earahee@advibeabency.com?subject=${emailSubject}&body=${emailBody}`);
+    });
+  </script>
+</body>
+</html>
