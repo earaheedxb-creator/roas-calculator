@@ -1,6 +1,6 @@
-
 document.getElementById("roasForm").addEventListener("submit", function(event) {
   event.preventDefault();
+
   const revenue = parseFloat(document.getElementById("revenue").value);
   const spend = parseFloat(document.getElementById("spend").value);
   const resultDiv = document.getElementById("result");
@@ -15,5 +15,6 @@ document.getElementById("roasForm").addEventListener("submit", function(event) {
   const roas = revenue / spend;
   resultDiv.textContent = `Your ROAS is: ${roas.toFixed(2)}x`;
 
+  // ✅ Show the CTA Button
   ctaBtn.classList.remove("hidden");
 });
